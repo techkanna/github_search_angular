@@ -7,10 +7,10 @@ import { Observable } from "rxjs";
 })
 export class GitusersService {
   public UserName: string = "techkanna";
-  public user: any = { user: null };
+  public user: any = { user: {} };
 
   public userRepos: any = { repo: [] };
-  public ErrorMessage: string = null;
+  public ErrorMessage: any = { msg: null };
   private Url: string = "https://api.github.com/users";
   constructor(private http: HttpClient) {}
   getUserDetails(): Observable<Object> {
@@ -27,10 +27,11 @@ export class GitusersService {
         this.user.user = userDetails;
         this.getUserRepos().subscribe(repo => {
           this.userRepos.repo = repo;
+          this.ErrorMessage.msg = null;
         });
       },
       err => {
-        this.ErrorMessage = err.error.message;
+        this.ErrorMessage.msg = err.error.message;
       }
     );
   }

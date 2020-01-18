@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div *ngIf="ErrorMessage === null; else elseBlock">
+  <div *ngIf="ErrorMessage.msg === null; else elseBlock">
     <div class="row" *ngIf="(user.user | json) != '{}'">
       <div class="card mb-3 mt-4 col-8 col-md-6 px-0 mx-auto">
         <div class="card-header">
@@ -56,12 +56,22 @@
                 <li class="list-group-item">
                   <strong>Blog :</strong>
                   <a
-                    href="https://{{ user.user.blog }}/"
+                    *ngIf="user.user.blog.includes('http'); else caseTwo"
+                    href="{{ user.user.blog }}"
                     target="_blank"
                     title="{{ user.user.blog }}"
                   >
                     {{ user.user.blog }}</a
                   >
+                  <ng-template #caseTwo>
+                    <a
+                      href="https://{{ user.user.blog }}/"
+                      target="_blank"
+                      title="{{ user.user.blog }}"
+                    >
+                      {{ user.user.blog }}</a
+                    >
+                  </ng-template>
                 </li>
                 <li class="list-group-item">
                   <strong>Bio :</strong> {{ user.user.bio }}
@@ -79,7 +89,7 @@
     <div class="row" *ngIf="userRepos.repo.length != 0">
       <div class="card mb-3 mt-4 col-8 col-md-6 px-0 mx-auto">
         <div class="card-header">
-          <h6>{{ user.login | titlecase }} Repos</h6>
+          <h6>{{ user.user.login | titlecase }} Repos</h6>
         </div>
         <app-userrepo
           class="list-group list-group-flush"
@@ -92,8 +102,7 @@
   </div>
   <ng-template #elseBlock>
     <h2 class="m-4">
-      ERROR MESSAGE : {{ ErrorMessage | json }} .(kindly refresh and search
-      again)
+      ERROR MESSAGE : {{ ErrorMessage.msg | json }}
     </h2></ng-template
   >
 </div>

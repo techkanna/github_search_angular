@@ -12,9 +12,8 @@ export class SearchComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
-    console.log(this.gitUsersService.UserName);
     this.gitUsersService.UserName = this.userName;
-    console.log(this.gitUsersService.UserName);
+
     this.userName = "";
   }
 }
