@@ -7,9 +7,9 @@ import { Observable } from "rxjs";
 })
 export class GitusersService {
   public UserName: string = "techkanna";
-  public user: any = { user: {} };
+  public user: Object;
 
-  public userRepos: any = { repo: [] };
+  public userRepos: any;
   public ErrorMessage: any = { msg: null };
   private Url: string = "https://api.github.com/users";
   constructor(private http: HttpClient) {}
