@@ -6,14 +6,12 @@ import { GitusersService } from "../../services/gitusers.service";
   styleUrls: ["./search.component.css"]
 })
 export class SearchComponent implements OnInit {
-  userName: string;
+  public userName: string;
   constructor(private gitUsersService: GitusersService) {}
 
   ngOnInit() {}
 
   onSubmit() {
-    this.gitUsersService.UserName = this.userName;
-
-    this.userName = "";
+    this.gitUsersService.setUser(this.userName);
   }
 }

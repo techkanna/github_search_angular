@@ -1,37 +1,41 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
 export class GitusersService {
-  public UserName: string = "techkanna";
-  public user: Object;
-
-  public userRepos: any;
-  public ErrorMessage: any = { msg: null };
   private Url: string = "https://api.github.com/users";
+  public user: Object = {};
+  public userRepos: any = [];
+  public errorMessage: string;
+
   constructor(private http: HttpClient) {}
-  getUserDetails(): Observable<Object> {
-    return this.http.get<Object>(`${this.Url}/${this.UserName}`);
+
+  getUser() {
+    return of(this.user);
   }
 
-  getUserRepos(): Observable<any> {
-    return this.http.get<any>(`${this.Url}/${this.UserName}/repos`);
+  getUserDetails(userName: string): Observable<Object> {
+    return this.http.get<Object>(`${this.Url}/${userName}`);
   }
 
-  setUsers(): void {
-    this.getUserDetails().subscribe(
+  getUserRepos(userName: string): Observable<any> {
+    return this.http.get<any>(`${this.Url}/${userName}/repos`);
+  }
+
+  setUser(userName: string = "techkanna"): void {
+    this.getUserDetails(userName).subscribe(
       userDetails => {
-        this.user.user = userDetails;
-        this.getUserRepos().subscribe(repo => {
-          this.userRepos.repo = repo;
-          this.ErrorMessage.msg = null;
+        this.user = userDetails;
+        this.getUserRepos(userName).subscribe(repo => {
+          this.userRepos = repo;
+          this.errorMessage = null;
         });
       },
       err => {
-        this.ErrorMessage.msg = err.error.message;
+        this.errorMessage = err.error.message;
       }
     );
   }

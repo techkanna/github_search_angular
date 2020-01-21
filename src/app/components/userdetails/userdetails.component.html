@@ -1,30 +1,14 @@
 <div>
-  <div class="grid">
-    <div class="col-8 col-md-6 px-0 mx-auto">
-      <form (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <input
-            name="userName"
-            type="text"
-            class="form-control"
-            placeholder="search user by username..."
-            [(ngModel)]="userName"
-          />
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div *ngIf="ErrorMessage.msg === null; else elseBlock">
-    <div class="row" *ngIf="(user.user | json) != '{}'">
+  <div *ngIf="!gitUserService.errorMessage; else elseBlock">
+    <div class="row" *ngIf="(gitUserService.user | json) != '{}'">
       <div class="card mb-3 mt-4 col-8 col-md-6 px-0 mx-auto">
         <div class="card-header">
-          <h4>{{ user.user.login | titlecase }}</h4>
+          <h4>{{ gitUserService.user.login | titlecase }}</h4>
         </div>
         <div class="row no-gutters">
           <div class="col-md-4 p-2">
             <img
-              src="{{ user.user.avatar_url }}"
+              src="{{ gitUserService.user.avatar_url }}"
               class="card-img"
               alt="userImg..."
             />
@@ -32,52 +16,56 @@
           <div class="col-md-8">
             <div class="card-body">
               <span class="badge badge-primary mr-1"
-                >{{ user.user.public_repos }} public Repos</span
+                >{{ gitUserService.user.public_repos }} public Repos</span
               >
               <span class="badge badge-success mr-1"
-                >{{ user.user.public_gists }} public Gists</span
+                >{{ gitUserService.user.public_gists }} public Gists</span
               >
               <span class="badge badge-warning mr-1"
-                >{{ user.user.followers }} followers</span
+                >{{ gitUserService.user.followers }} followers</span
               >
               <span class="badge badge-info mr-1"
-                >{{ user.user.following }} following</span
+                >{{ gitUserService.user.following }} following</span
               >
               <ul class="list-group mt-3">
                 <li class="list-group-item">
-                  <strong>UserName :</strong> {{ user.user.login }}
+                  <strong>UserName :</strong> {{ gitUserService.user.login }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Location :</strong> {{ user.user.location }}
+                  <strong>Location :</strong> {{ gitUserService.user.location }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Email :</strong> {{ user.user.email }}
+                  <strong>Email :</strong> {{ gitUserService.user.email }}
                 </li>
                 <li class="list-group-item">
                   <strong>Blog :</strong>
                   <a
-                    *ngIf="user.user.blog.includes('http'); else caseTwo"
-                    href="{{ user.user.blog }}"
+                    *ngIf="
+                      gitUserService.user.blog.includes('http');
+                      else caseTwo
+                    "
+                    href="{{ gitUserService.user.blog }}"
                     target="_blank"
-                    title="{{ user.user.blog }}"
+                    title="{{ gitUserService.user.blog }}"
                   >
-                    {{ user.user.blog }}</a
+                    {{ gitUserService.user.blog }}</a
                   >
                   <ng-template #caseTwo>
                     <a
-                      href="https://{{ user.user.blog }}/"
+                      href="https://{{ gitUserService.user.blog }}/"
                       target="_blank"
-                      title="{{ user.user.blog }}"
+                      title="{{ gitUserService.user.blog }}"
                     >
-                      {{ user.user.blog }}</a
+                      {{ gitUserService.user.blog }}</a
                     >
                   </ng-template>
                 </li>
                 <li class="list-group-item">
-                  <strong>Bio :</strong> {{ user.user.bio }}
+                  <strong>Bio :</strong> {{ gitUserService.user.bio }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Member Since :</strong> {{ user.user.created_at }}
+                  <strong>Member Since :</strong>
+                  {{ gitUserService.user.created_at }}
                 </li>
               </ul>
             </div>
@@ -86,14 +74,14 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="userRepos.repo.length != 0">
+    <div class="row" *ngIf="gitUserService.userRepos.length != 0">
       <div class="card mb-3 mt-4 col-8 col-md-6 px-0 mx-auto">
         <div class="card-header">
-          <h6>{{ user.user.login | titlecase }} Repos</h6>
+          <h6>{{ gitUserService.user.login | titlecase }} Repos</h6>
         </div>
         <app-userrepo
           class="list-group list-group-flush"
-          *ngFor="let repo of userRepos.repo"
+          *ngFor="let repo of gitUserService.userRepos"
           [repo]="repo"
         >
         </app-userrepo>
@@ -102,7 +90,7 @@
   </div>
   <ng-template #elseBlock>
     <h2 class="m-4">
-      ERROR MESSAGE : {{ ErrorMessage.msg | json }}
+      ERROR MESSAGE : {{ gitUserService.errorMessage }}
     </h2></ng-template
   >
 </div>
